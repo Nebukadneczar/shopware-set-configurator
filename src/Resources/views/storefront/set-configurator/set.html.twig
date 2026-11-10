@@ -1,0 +1,13 @@
+{# Ein Set (auch verschachtelt, rekursiv eingebunden). Erwartet: set #}
+{% block set_configurator %}
+    <div class="sc-set" data-sc-set data-set-id="{{ set.id }}">
+        {% if set.description %}
+            <p class="sc-set-description">{{ set.description }}</p>
+        {% endif %}
+        <div class="sc-slots">
+            {% for slot in set.slots %}
+                {% sw_include '@SetConfigurator/storefront/set-configurator/slot.html.twig' with { slot: slot } %}
+            {% endfor %}
+        </div>
+    </div>
+{% endblock %}

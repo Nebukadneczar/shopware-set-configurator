@@ -1,0 +1,60 @@
+.set-configurator-detail {
+    .sc-option-box {
+        margin: 16px 0;
+        padding: 16px;
+        border: 1px solid #d1d9e0;
+        border-left: 4px solid #0b5ed7;
+        border-radius: 4px;
+    }
+
+    .sc-field-box {
+        margin: 12px 0 12px 24px;
+        padding: 12px;
+        border: 1px dashed #d1d9e0;
+        border-radius: 4px;
+    }
+
+    .sc-textarea {
+        width: 100%;
+        padding: 8px 12px;
+        border: 1px solid #d1d9e0;
+        border-radius: 4px;
+        font-family: monospace;
+    }
+
+    .sc-help {
+        margin: 4px 0 12px;
+        font-size: 12px;
+        color: #52667a;
+    }
+
+    .sc-error {
+        margin: -8px 0 12px;
+        font-size: 12px;
+        color: #de294c;
+    }
+
+    .sc-actions {
+        display: flex;
+        gap: 8px;
+        margin-top: 8px;
+
+        &--page {
+            margin: 0 0 24px;
+        }
+    }
+
+    .sc-assignments {
+        margin: 0 0 16px;
+        padding: 0;
+        list-style: none;
+
+        li {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 6px 0;
+            border-bottom: 1px solid #e0e6eb;
+        }
+    }
+}

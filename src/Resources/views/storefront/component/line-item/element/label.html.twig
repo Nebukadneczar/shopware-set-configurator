@@ -1,0 +1,13 @@
+{% sw_extends '@Storefront/storefront/component/line-item/element/label.html.twig' %}
+
+{# Zeigt die Auswahl eines Sets unter dem Produktnamen (Warenkorb, Bestellbestätigung, Konto, Bestellungen). #}
+{% block component_line_item_label %}
+    {{ parent() }}
+
+    {% set scSummary = lineItem.payload.setConfiguratorSummary is defined ? lineItem.payload.setConfiguratorSummary : null %}
+    {% if scSummary %}
+        <div class="sc-set-summary">
+            {% sw_include '@SetConfigurator/storefront/set-configurator/summary.html.twig' with { rows: scSummary } %}
+        </div>
+    {% endif %}
+{% endblock %}

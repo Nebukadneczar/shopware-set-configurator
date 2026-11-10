@@ -1,0 +1,354 @@
+{% block set_configurator_detail %}
+    <sw-page class="set-configurator-detail">
+        <template #smart-bar-header>
+            <h2>{{ set && set.name ? set.name : $tc('set-configurator.detail.newSet') }}</h2>
+        </template>
+
+        <template #smart-bar-actions>
+            <sw-button :router-link="{ name: 'set.configurator.index' }">
+                {{ $tc('set-configurator.detail.cancel') }}
+            </sw-button>
+            <sw-button-process
+                variant="primary"
+                :is-loading="isSaving"
+                :process-success="false"
+                @click="save"
+            >
+                {{ $tc('set-configurator.detail.save') }}
+            </sw-button-process>
+        </template>
+
+        <template #content>
+            <sw-card-view v-if="set">
+                <!-- Basisdaten -->
+                <sw-card
+                    position-identifier="set-configurator-detail-base"
+                    :title="$tc('set-configurator.detail.base')"
+                    :is-loading="isLoading"
+                >
+                    <sw-text-field
+                        v-model:value="set.name"
+                        :label="$tc('set-configurator.detail.name')"
+                        required
+                    />
+                    <sw-textarea-field
+                        v-model:value="set.description"
+                        :label="$tc('set-configurator.detail.description')"
+                    />
+                    <sw-switch-field
+                        v-model:value="set.active"
+                        :label="$tc('set-configurator.detail.active')"
+                    />
+                    <sw-text-field
+                        :value="set.priceFormula"
+                        :label="$tc('set-configurator.detail.setFormula')"
+                        :help-text="$tc('set-configurator.detail.setFormulaHelp')"
+                        placeholder="base + options"
+                        @update:value="onFormula(set, $event)"
+                    />
+                    <p v-if="formulaErrors[set.id]" class="sc-error">{{ formulaErrors[set.id] }}</p>
+                </sw-card>
+
+                <!-- Slots -->
+                <sw-card
+                    v-for="slot in set.slots"
+                    :key="slot.id"
+                    position-identifier="set-configurator-detail-slot"
+                    :title="slot.name || $tc('set-configurator.detail.newSlot')"
+                    class="sc-slot-card"
+                >
+                    <sw-container columns="2fr 1fr 1fr 1fr" gap="0 16px">
+                        <sw-text-field
+                            v-model:value="slot.name"
+                            :label="$tc('set-configurator.detail.slotName')"
+                            required
+                        />
+                        <mt-select
+                            v-model="slot.template"
+                            :label="$tc('set-configurator.detail.slotTemplate')"
+                            :options="slotTemplateOptions"
+                        />
+                        <sw-number-field
+                            v-model:value="slot.minSelect"
+                            number-type="int"
+                            :min="0"
+                            :label="$tc('set-configurator.detail.minSelect')"
+                        />
+                        <sw-number-field
+                            v-model:value="slot.maxSelect"
+                            number-type="int"
+                            :min="0"
+                            allow-empty
+                            :label="$tc('set-configurator.detail.maxSelect')"
+                        />
+                    </sw-container>
+                    <sw-container columns="1fr 120px" gap="0 16px">
+                        <sw-textarea-field
+                            v-model:value="slot.description"
+                            :label="$tc('set-configurator.detail.description')"
+                        />
+                        <sw-number-field
+                            v-model:value="slot.position"
+                            number-type="int"
+                            :label="$tc('set-configurator.detail.position')"
+                        />
+                    </sw-container>
+
+                    <!-- Optionen -->
+                    <div
+                        v-for="option in slot.options"
+                        :key="option.id"
+                        class="sc-option-box"
+                    >
+                        <sw-container columns="1fr 2fr 1fr 1fr 100px" gap="0 16px">
+                            <mt-select
+                                :model-value="option.type"
+                                :label="$tc('set-configurator.detail.optionType')"
+                                :options="optionTypeOptions"
+                                @update:model-value="onOptionType(option, $event)"
+                            />
+
+                            <sw-entity-single-select
+                                v-if="option.type === 'product'"
+                                v-model:value="option.productId"
+                                entity="product"
+                                :criteria="productCriteria"
+                                :label="$tc('set-configurator.detail.product')"
+                                label-property="name"
+                            />
+                            <sw-text-field
+                                v-else
+                                v-model:value="option.label"
+                                :label="$tc('set-configurator.detail.optionLabel')"
+                            />
+
+                            <sw-number-field
+                                v-model:value="option.quantityMin"
+                                number-type="int"
+                                :min="0"
+                                :label="$tc('set-configurator.detail.quantityMin')"
+                            />
+                            <sw-number-field
+                                v-model:value="option.quantityMax"
+                                number-type="int"
+                                :min="0"
+                                :label="$tc('set-configurator.detail.quantityMax')"
+                            />
+                            <sw-number-field
+                                v-model:value="option.position"
+                                number-type="int"
+                                :label="$tc('set-configurator.detail.position')"
+                            />
+                        </sw-container>
+
+                        <sw-container columns="1fr 1fr" gap="0 16px">
+                            <sw-text-field
+                                v-if="option.type === 'product'"
+                                v-model:value="option.label"
+                                :label="$tc('set-configurator.detail.optionLabelOptional')"
+                            />
+                            <sw-entity-single-select
+                                v-model:value="option.nestedSetId"
+                                entity="set_configurator"
+                                :label="$tc('set-configurator.detail.nestedSet')"
+                                :help-text="$tc('set-configurator.detail.nestedSetHelp')"
+                            />
+                        </sw-container>
+
+                        <sw-text-field
+                            :value="option.priceFormula"
+                            :label="$tc('set-configurator.detail.optionFormula')"
+                            :help-text="$tc('set-configurator.detail.optionFormulaHelp')"
+                            placeholder="price * 0.9"
+                            @update:value="onFormula(option, $event)"
+                        />
+                        <p v-if="formulaErrors[option.id]" class="sc-error">{{ formulaErrors[option.id] }}</p>
+
+                        <sw-switch-field
+                            v-model:value="option.preselected"
+                            :label="$tc('set-configurator.detail.preselected')"
+                        />
+
+                        <div class="sw-field">
+                            <label class="sw-field__label">{{ $tc('set-configurator.detail.customValues') }}</label>
+                            <textarea
+                                class="sc-textarea"
+                                rows="2"
+                                placeholder="aufschlag=2,5"
+                                :value="customValuesText(option)"
+                                @change="setCustomValues(option, $event.target.value)"
+                            ></textarea>
+                            <p class="sc-help">{{ $tc('set-configurator.detail.customValuesHelp') }}</p>
+                        </div>
+
+                        <!-- Zusatzfelder -->
+                        <div
+                            v-for="field in option.fields"
+                            :key="field.id"
+                            class="sc-field-box"
+                        >
+                            <sw-container columns="1fr 1fr 2fr 100px 100px" gap="0 16px">
+                                <mt-select
+                                    v-model="field.type"
+                                    :label="$tc('set-configurator.detail.fieldType')"
+                                    :options="fieldTypeOptions"
+                                />
+                                <sw-text-field
+                                    v-model:value="field.name"
+                                    :label="$tc('set-configurator.detail.fieldName')"
+                                    :help-text="$tc('set-configurator.detail.fieldNameHelp')"
+                                    required
+                                />
+                                <sw-text-field
+                                    v-model:value="field.label"
+                                    :label="$tc('set-configurator.detail.fieldLabel')"
+                                    required
+                                />
+                                <sw-switch-field
+                                    v-model:value="field.required"
+                                    :label="$tc('set-configurator.detail.required')"
+                                />
+                                <sw-number-field
+                                    v-model:value="field.position"
+                                    number-type="int"
+                                    :label="$tc('set-configurator.detail.position')"
+                                />
+                            </sw-container>
+
+                            <div v-if="field.type === 'select'" class="sw-field">
+                                <label class="sw-field__label">{{ $tc('set-configurator.detail.choices') }}</label>
+                                <textarea
+                                    class="sc-textarea"
+                                    rows="3"
+                                    placeholder="rot|Rot|0&#10;gold|Gold|5"
+                                    :value="choicesText(field)"
+                                    @change="setChoices(field, $event.target.value)"
+                                ></textarea>
+                                <p class="sc-help">{{ $tc('set-configurator.detail.choicesHelp') }}</p>
+                            </div>
+
+                            <sw-text-field
+                                :value="field.priceFormula"
+                                :label="$tc('set-configurator.detail.fieldFormula')"
+                                :help-text="$tc('set-configurator.detail.fieldFormulaHelp')"
+                                placeholder="value * 4.9"
+                                @update:value="onFormula(field, $event)"
+                            />
+                            <p v-if="formulaErrors[field.id]" class="sc-error">{{ formulaErrors[field.id] }}</p>
+
+                            <sw-button size="small" variant="danger" @click="removeField(option, field)">
+                                {{ $tc('set-configurator.detail.removeField') }}
+                            </sw-button>
+                        </div>
+
+                        <div class="sc-actions">
+                            <sw-button size="small" @click="addField(option)">
+                                {{ $tc('set-configurator.detail.addField') }}
+                            </sw-button>
+                            <sw-button size="small" variant="danger" @click="removeOption(slot, option)">
+                                {{ $tc('set-configurator.detail.removeOption') }}
+                            </sw-button>
+                        </div>
+                    </div>
+
+                    <div class="sc-actions">
+                        <sw-button size="small" @click="addOption(slot)">
+                            {{ $tc('set-configurator.detail.addOption') }}
+                        </sw-button>
+                        <sw-button size="small" variant="danger" @click="removeSlot(slot)">
+                            {{ $tc('set-configurator.detail.removeSlot') }}
+                        </sw-button>
+                    </div>
+                </sw-card>
+
+                <sw-card position-identifier="set-configurator-detail-add-slot">
+                    <sw-button @click="addSlot">{{ $tc('set-configurator.detail.addSlot') }}</sw-button>
+                </sw-card>
+
+                <!-- Produktzuweisung -->
+                <sw-card
+                    position-identifier="set-configurator-detail-assignments"
+                    :title="$tc('set-configurator.detail.assignments')"
+                >
+                    <p v-if="isCreate" class="sc-help">{{ $tc('set-configurator.detail.saveFirst') }}</p>
+
+                    <template v-else>
+                        <p class="sc-help">{{ $tc('set-configurator.detail.assignmentsHelp') }}</p>
+
+                        <ul class="sc-assignments">
+                            <li v-for="assignment in set.assignments" :key="assignment.id">
+                                <span>{{ productLabel(assignment) }}</span>
+                                <sw-button size="small" variant="danger" @click="removeAssignment(assignment)">
+                                    {{ $tc('set-configurator.detail.unassign') }}
+                                </sw-button>
+                            </li>
+                        </ul>
+
+                        <sw-entity-single-select
+                            v-model:value="newProductId"
+                            entity="product"
+                            :criteria="productCriteria"
+                            :label="$tc('set-configurator.detail.addProduct')"
+                            label-property="name"
+                            @update:value="assignProduct"
+                        />
+                    </template>
+                </sw-card>
+
+                <!-- Zuweisung nach Kategorie / Hersteller -->
+                <sw-card
+                    position-identifier="set-configurator-detail-targets"
+                    :title="$tc('set-configurator.detail.targets')"
+                >
+                    <p v-if="isCreate" class="sc-help">{{ $tc('set-configurator.detail.saveFirst') }}</p>
+
+                    <template v-else>
+                        <p class="sc-help">{{ $tc('set-configurator.detail.targetsHelp') }}</p>
+
+                        <ul class="sc-assignments">
+                            <li v-for="target in set.targets" :key="target.id">
+                                <span>{{ targetLabel(target) }}</span>
+                                <sw-button size="small" variant="danger" @click="removeTarget(target)">
+                                    {{ $tc('set-configurator.detail.unassign') }}
+                                </sw-button>
+                            </li>
+                        </ul>
+
+                        <sw-container columns="1fr 2fr" gap="0 16px">
+                            <mt-select
+                                v-model="newTarget.type"
+                                :label="$tc('set-configurator.detail.targetType')"
+                                :options="targetTypeOptions"
+                            />
+
+                            <sw-entity-single-select
+                                v-if="newTarget.type === 'category'"
+                                v-model:value="newTarget.categoryId"
+                                entity="category"
+                                label-property="name"
+                                :label="$tc('set-configurator.targetTypes.category')"
+                            />
+                            <sw-entity-single-select
+                                v-else
+                                v-model:value="newTarget.manufacturerId"
+                                entity="product_manufacturer"
+                                label-property="name"
+                                :label="$tc('set-configurator.targetTypes.manufacturer')"
+                            />
+                        </sw-container>
+
+                        <sw-switch-field
+                            v-if="newTarget.type === 'category'"
+                            v-model:value="newTarget.includeChildren"
+                            :label="$tc('set-configurator.detail.includeChildren')"
+                        />
+
+                        <sw-button variant="primary" size="small" :disabled="!canAddTarget" @click="addTarget">
+                            {{ $tc('set-configurator.detail.addTarget') }}
+                        </sw-button>
+                    </template>
+                </sw-card>
+            </sw-card-view>
+        </template>
+    </sw-page>
+{% endblock %}

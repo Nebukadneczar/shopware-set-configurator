@@ -1,0 +1,106 @@
+{
+    "set-configurator": {
+        "general": {
+            "title": "Produktsets",
+            "description": "Set-Konfigurator: Sets mit Slots, Optionen und Preisformeln"
+        },
+        "list": {
+            "add": "Set anlegen",
+            "name": "Name",
+            "active": "Aktiv",
+            "created": "Angelegt am"
+        },
+        "templates": {
+            "select": "Auswahlliste",
+            "radio": "Optionsfelder",
+            "checkbox": "Checkboxen",
+            "cards": "Karten"
+        },
+        "optionTypes": {
+            "product": "Produkt",
+            "static": "Statische Option"
+        },
+        "fieldTypes": {
+            "checkbox": "Checkbox",
+            "select": "Auswahlfeld",
+            "text": "Textfeld",
+            "number": "Nummernfeld",
+            "upload": "Uploadfeld"
+        },
+        "detail": {
+            "newSet": "Neues Set",
+            "save": "Speichern",
+            "cancel": "Abbrechen",
+            "saved": "Das Set wurde gespeichert.",
+            "saveError": "Das Set konnte nicht gespeichert werden.",
+            "base": "Basisdaten",
+            "name": "Name",
+            "description": "Beschreibung",
+            "active": "Aktiv",
+            "position": "Position",
+            "setFormula": "Preisformel des Sets",
+            "setFormulaHelp": "Optional. Variablen: base (Preis des Hauptprodukts), options (Summe der Optionen). Ohne Formel gilt base + options. Beispiel: (base + options) * 0.9 für 10 % Rabatt.",
+            "newSlot": "Neuer Slot",
+            "slotName": "Name des Slots",
+            "slotTemplate": "Darstellung im Shop",
+            "minSelect": "Mindestens wählen",
+            "maxSelect": "Höchstens wählen",
+            "addSlot": "Slot hinzufügen",
+            "removeSlot": "Slot löschen",
+            "optionType": "Typ",
+            "product": "Produkt (bei Varianten: Elternprodukt = Kunde wählt, Variante = feste Vorauswahl)",
+            "optionLabel": "Bezeichnung",
+            "optionLabelOptional": "Bezeichnung (optional, sonst Produktname)",
+            "quantityMin": "Menge von",
+            "quantityMax": "Menge bis",
+            "nestedSet": "Verschachteltes Set",
+            "nestedSetHelp": "Wird diese Option gewählt, konfiguriert der Kunde zusätzlich dieses Set. Dessen Summe wird zum Preis der Option addiert.",
+            "optionFormula": "Preisformel der Option",
+            "optionFormulaHelp": "Einzelpreis der Option. Variablen: price, quantity, base, nested, option.<name>, product.<name>, field.<name>. Ohne Formel: Produktpreis (statische Option: 0).",
+            "preselected": "Vorausgewählt",
+            "customValues": "Eigene Werte",
+            "customValuesHelp": "Eine Zeile je Wert: name=zahl. In Formeln als option.name verwendbar.",
+            "addOption": "Option hinzufügen",
+            "removeOption": "Option löschen",
+            "addField": "Zusatzfeld hinzufügen",
+            "removeField": "Zusatzfeld löschen",
+            "fieldType": "Feldtyp",
+            "fieldName": "Technischer Name",
+            "fieldNameHelp": "Nur Buchstaben, Ziffern und _. In Formeln als field.name verwendbar.",
+            "fieldLabel": "Beschriftung",
+            "required": "Pflicht",
+            "choices": "Auswahlwerte",
+            "choicesHelp": "Eine Zeile je Wert: wert|Beschriftung|Zahl. Die Zahl wird in Preisformeln als value bzw. field.name verwendet.",
+            "fieldFormula": "Preisformel des Feldes",
+            "fieldFormulaHelp": "Aufpreis je Einheit. Zusätzlich zu den Option-Variablen gibt es value (Checkbox 1/0, Zahl, Wert der Auswahl, Text 1 wenn gefüllt).",
+            "assignments": "Zugewiesene Produkte",
+            "assignmentsHelp": "Ein Produkt kann nur ein Set haben. Ein Set am Elternprodukt gilt auch für alle Varianten; eine eigene Zuweisung an einer Variante hat Vorrang.",
+            "saveFirst": "Bitte speichere das Set zuerst, dann kannst du Produkte zuweisen.",
+            "addProduct": "Produkt zuweisen",
+            "unassign": "Zuweisung entfernen",
+            "targets": "Zuweisung nach Kategorie oder Hersteller",
+            "targetsHelp": "Alle Produkte einer Kategorie (optional samt Unterkategorien) oder eines Herstellers erhalten dieses Set. Rangfolge: Zuweisung direkt am Produkt, dann Kategorie (die genaueste zuerst), dann Hersteller. Bei Gleichstand gewinnt das früher angelegte Set.",
+            "targetType": "Zuweisen nach",
+            "includeChildren": "Unterkategorien einbeziehen",
+            "withChildren": "inkl. Unterkategorien",
+            "addTarget": "Zuweisung hinzufügen"
+        },
+        "transfer": {
+            "export": "Exportieren",
+            "import": "Importieren",
+            "exportError": "Der Export ist fehlgeschlagen.",
+            "invalidFile": "Die Datei konnte nicht gelesen werden. Bitte eine Set-Exportdatei (JSON) wählen.",
+            "importTitle": "Sets importieren",
+            "problems": "Die Datei kann so nicht importiert werden:",
+            "summary": "Geprüft: {created} neue Sets, {replaced} werden ersetzt, {reassigned} Produkte werden einem anderen Set zugewiesen.",
+            "replaceWarning": "Vorhandene Sets mit gleichem Namen werden vollständig ersetzt (Slots, Optionen, Felder, Zuweisungen).",
+            "importNow": "Jetzt importieren",
+            "done": "Der Import ist abgeschlossen.",
+            "importError": "Der Import ist fehlgeschlagen."
+        },
+        "targetTypes": {
+            "category": "Kategorie",
+            "manufacturer": "Hersteller"
+        }
+    }
+}

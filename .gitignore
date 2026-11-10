@@ -1,0 +1,11 @@
+*.zip
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+node_modules/
+vendor/
+composer.lock
+# Gebaute Oberfläche: wird im Shop gebaut bzw. liegt im Release-ZIP, nicht im Repository
+src/Resources/public/
+src/Resources/app/storefront/dist/

@@ -1,0 +1,38 @@
+{# Gemeinsame Basis für radio/checkbox/cards. Erwartet: slot, mode (list|cards) #}
+{% set inputType = slot.multiple ? 'checkbox' : 'radio' %}
+{% set groupName = 'sc-' ~ slot.id %}
+
+<div class="sc-options sc-options--{{ mode }}">
+    {% if not slot.multiple and slot.min < 1 %}
+        <div class="sc-option sc-option--none">
+            <div class="sc-option-head">
+                <label class="form-check">
+                    <input type="radio" class="form-check-input" name="{{ groupName }}" value="" data-sc-pick data-sc-none checked>
+                    <span class="form-check-label">{{ 'set-configurator.none'|trans }}</span>
+                </label>
+            </div>
+        </div>
+    {% endif %}
+
+    {% for option in slot.options %}
+        <div class="sc-option" data-sc-option data-option-id="{{ option.id }}">
+            <div class="sc-option-head">
+                <label class="form-check">
+                    <input type="{{ inputType }}"
+                           class="form-check-input"
+                           name="{{ groupName }}"
+                           value="{{ option.id }}"
+                           data-sc-pick
+                           {% if option.preselected %}checked{% endif %}>
+                    <span class="form-check-label">
+                        <span class="sc-option-label">{{ option.label }}</span>
+                        {% if option.price is not null and option.price > 0 %}
+                            <span class="sc-option-price">+ {{ option.price|currency }}</span>
+                        {% endif %}
+                    </span>
+                </label>
+            </div>
+            {% sw_include '@SetConfigurator/storefront/set-configurator/option-body.html.twig' with { option: option } %}
+        </div>
+    {% endfor %}
+</div>

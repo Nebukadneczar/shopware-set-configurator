@@ -1,0 +1,106 @@
+{
+    "set-configurator": {
+        "general": {
+            "title": "Product sets",
+            "description": "Set configurator: sets with slots, options and price formulas"
+        },
+        "list": {
+            "add": "Add set",
+            "name": "Name",
+            "active": "Active",
+            "created": "Created"
+        },
+        "templates": {
+            "select": "Select list",
+            "radio": "Radio buttons",
+            "checkbox": "Checkboxes",
+            "cards": "Cards"
+        },
+        "optionTypes": {
+            "product": "Product",
+            "static": "Static option"
+        },
+        "fieldTypes": {
+            "checkbox": "Checkbox",
+            "select": "Select field",
+            "text": "Text field",
+            "number": "Number field",
+            "upload": "Upload field"
+        },
+        "detail": {
+            "newSet": "New set",
+            "save": "Save",
+            "cancel": "Cancel",
+            "saved": "The set has been saved.",
+            "saveError": "The set could not be saved.",
+            "base": "Basic data",
+            "name": "Name",
+            "description": "Description",
+            "active": "Active",
+            "position": "Position",
+            "setFormula": "Set price formula",
+            "setFormulaHelp": "Optional. Variables: base (main product price), options (sum of options). Without a formula, base + options applies. Example: (base + options) * 0.9 for 10 % off.",
+            "newSlot": "New slot",
+            "slotName": "Slot name",
+            "slotTemplate": "Storefront display",
+            "minSelect": "Choose at least",
+            "maxSelect": "Choose at most",
+            "addSlot": "Add slot",
+            "removeSlot": "Delete slot",
+            "optionType": "Type",
+            "product": "Product (variants: parent = customer chooses, variant = fixed preselection)",
+            "optionLabel": "Label",
+            "optionLabelOptional": "Label (optional, defaults to product name)",
+            "quantityMin": "Quantity from",
+            "quantityMax": "Quantity to",
+            "nestedSet": "Nested set",
+            "nestedSetHelp": "If this option is chosen, the customer also configures this set. Its total is added to the option price.",
+            "optionFormula": "Option price formula",
+            "optionFormulaHelp": "Unit price of the option. Variables: price, quantity, base, nested, option.<name>, product.<name>, field.<name>. Without a formula: product price (static option: 0).",
+            "preselected": "Preselected",
+            "customValues": "Custom values",
+            "customValuesHelp": "One line per value: name=number. Usable in formulas as option.name.",
+            "addOption": "Add option",
+            "removeOption": "Delete option",
+            "addField": "Add extra field",
+            "removeField": "Delete extra field",
+            "fieldType": "Field type",
+            "fieldName": "Technical name",
+            "fieldNameHelp": "Letters, digits and _ only. Usable in formulas as field.name.",
+            "fieldLabel": "Label",
+            "required": "Required",
+            "choices": "Choices",
+            "choicesHelp": "One line per value: value|label|number. The number is used in price formulas as value or field.name.",
+            "fieldFormula": "Field price formula",
+            "fieldFormulaHelp": "Surcharge per unit. In addition to the option variables there is value (checkbox 1/0, number, choice number, text 1 if filled).",
+            "assignments": "Assigned products",
+            "assignmentsHelp": "A product can only have one set. A set on a parent product also applies to all variants; an own assignment on a variant takes precedence.",
+            "saveFirst": "Please save the set first, then you can assign products.",
+            "addProduct": "Assign product",
+            "unassign": "Remove assignment",
+            "targets": "Assignment by category or manufacturer",
+            "targetsHelp": "All products of a category (optionally including subcategories) or of a manufacturer receive this set. Precedence: assignment directly on the product, then category (most specific first), then manufacturer. On a tie the earlier created set wins.",
+            "targetType": "Assign by",
+            "includeChildren": "Include subcategories",
+            "withChildren": "incl. subcategories",
+            "addTarget": "Add assignment"
+        },
+        "transfer": {
+            "export": "Export",
+            "import": "Import",
+            "exportError": "The export failed.",
+            "invalidFile": "The file could not be read. Please choose a set export file (JSON).",
+            "importTitle": "Import sets",
+            "problems": "This file cannot be imported as is:",
+            "summary": "Checked: {created} new sets, {replaced} will be replaced, {reassigned} products will be moved to another set.",
+            "replaceWarning": "Existing sets with the same name are replaced completely (slots, options, fields, assignments).",
+            "importNow": "Import now",
+            "done": "The import is complete.",
+            "importError": "The import failed."
+        },
+        "targetTypes": {
+            "category": "Category",
+            "manufacturer": "Manufacturer"
+        }
+    }
+}

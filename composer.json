@@ -1,0 +1,61 @@
+{
+  "name": "macdata/set-configurator",
+  "description": "Set-Konfigurator für Shopware 6.7: Kunden stellen Produktsets selbst zusammen (Slots, Optionen, Zusatzfelder, verschachtelte Sets, Preisformeln)",
+  "type": "shopware-platform-plugin",
+  "version": "0.7.0",
+  "require": {
+    "php": ">=8.2",
+    "shopware/core": "~6.7.0",
+    "shopware/storefront": "~6.7.0",
+    "shopware/administration": "~6.7.0"
+  },
+  "require-dev": {
+    "phpunit/phpunit": "^11.0"
+  },
+  "extra": {
+    "shopware-plugin-class": "SetConfigurator\\SetConfigurator",
+    "label": {
+      "de-DE": "Set-Konfigurator (Beta)",
+      "en-GB": "Set Configurator (Beta)"
+    },
+    "description": {
+      "de-DE": "Kunden konfigurieren Produktsets selbst: Sets mit Slots, Optionen (Produkt oder statisch), Mengen, Zusatzfeldern, verschachtelten Sets und dynamischer Preisformel. Zuweisung an Produkte, Kategorien oder Hersteller. Beta-Version.",
+      "en-GB": "Customers configure product sets themselves: sets with slots, options (product or static), quantities, extra fields, nested sets and dynamic price formulas. Assignment to products, categories or manufacturers. Beta version."
+    },
+    "manufacturerLink": {
+      "de-DE": "https://macdata.de",
+      "en-GB": "https://macdata.de"
+    },
+    "supportLink": {
+      "de-DE": "https://github.com/Nebukadneczar/shopware-set-configurator/issues",
+      "en-GB": "https://github.com/Nebukadneczar/shopware-set-configurator/issues"
+    },
+    "plugin-icon": "src/Resources/config/plugin.png"
+  },
+  "autoload": {
+    "psr-4": {
+      "SetConfigurator\\": "src/"
+    }
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "SetConfigurator\\Tests\\": "tests/"
+    }
+  },
+  "authors": [
+    {
+      "name": "Markus Czarnetzki",
+      "homepage": "https://macdata.de"
+    }
+  ],
+  "homepage": "https://macdata.de",
+  "license": "MIT",
+  "keywords": [
+    "shopware",
+    "shopware6",
+    "shopware-plugin",
+    "product-configurator",
+    "bundle",
+    "product-sets"
+  ]
+}

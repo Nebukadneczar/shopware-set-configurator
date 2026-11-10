@@ -1,0 +1,125 @@
+{
+    "format": "set-configurator-export",
+    "version": 1,
+    "sets": [
+        {
+            "key": "geschenkbox",
+            "name": "TEST Geschenkbox",
+            "description": "Beispiel zum Testen: ersetze TESTPRODUKT-1/2/3 durch echte Produktnummern aus dem Testshop.",
+            "active": true,
+            "priceFormula": null,
+            "slots": [
+                {
+                    "name": "Box",
+                    "description": "Wähle die Größe der Box",
+                    "template": "radio",
+                    "minSelect": 1,
+                    "maxSelect": 1,
+                    "position": 0,
+                    "options": [
+                        {
+                            "type": "static",
+                            "label": "Klein (Pappe)",
+                            "quantityMin": 1,
+                            "quantityMax": 1,
+                            "priceFormula": "4.9",
+                            "preselected": true,
+                            "position": 0,
+                            "fields": []
+                        },
+                        {
+                            "type": "static",
+                            "label": "Groß (Holz)",
+                            "quantityMin": 1,
+                            "quantityMax": 1,
+                            "priceFormula": "12.5",
+                            "preselected": false,
+                            "position": 1,
+                            "fields": [
+                                { "type": "checkbox", "name": "gravur", "label": "Mit Gravur", "required": false, "priceFormula": "value * 4.9", "position": 0 },
+                                { "type": "text", "name": "gravurtext", "label": "Gravurtext", "required": false, "position": 1 }
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "name": "Inhalt",
+                    "description": "Bis zu 2 Produkte, Menge 1 bis 3",
+                    "template": "cards",
+                    "minSelect": 0,
+                    "maxSelect": 2,
+                    "position": 1,
+                    "options": [
+                        {
+                            "type": "product",
+                            "productNumber": "TESTPRODUKT-2",
+                            "quantityMin": 1,
+                            "quantityMax": 3,
+                            "priceFormula": "price * 0.9",
+                            "position": 0,
+                            "fields": [
+                                {
+                                    "type": "select",
+                                    "name": "verpackung",
+                                    "label": "Verpackung",
+                                    "required": true,
+                                    "choices": [
+                                        { "value": "standard", "label": "Standard", "number": 0 },
+                                        { "value": "geschenk", "label": "Geschenkpapier", "number": 1.5 }
+                                    ],
+                                    "priceFormula": "value",
+                                    "position": 0
+                                }
+                            ]
+                        },
+                        {
+                            "type": "product",
+                            "productNumber": "TESTPRODUKT-3",
+                            "quantityMin": 1,
+                            "quantityMax": 1,
+                            "position": 1,
+                            "fields": []
+                        }
+                    ]
+                },
+                {
+                    "name": "Zugabe",
+                    "template": "select",
+                    "minSelect": 0,
+                    "maxSelect": 1,
+                    "position": 2,
+                    "options": [
+                        {
+                            "type": "static",
+                            "label": "Grußkarte mit eigenem Set",
+                            "quantityMin": 1,
+                            "quantityMax": 1,
+                            "nestedSet": "karte",
+                            "position": 0,
+                            "fields": []
+                        }
+                    ]
+                }
+            ],
+            "assignments": ["TESTPRODUKT-1"]
+        },
+        {
+            "key": "karte",
+            "name": "TEST Grußkarte",
+            "active": true,
+            "slots": [
+                {
+                    "name": "Motiv",
+                    "template": "radio",
+                    "minSelect": 1,
+                    "maxSelect": 1,
+                    "options": [
+                        { "type": "static", "label": "Geburtstag", "priceFormula": "1.5", "preselected": true, "fields": [] },
+                        { "type": "static", "label": "Weihnachten", "priceFormula": "1.5", "fields": [] }
+                    ]
+                }
+            ],
+            "assignments": []
+        }
+    ]
+}

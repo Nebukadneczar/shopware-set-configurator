@@ -1,0 +1,66 @@
+{#
+    Details einer Option: Variante, Menge, Zusatzfelder, verschachteltes Set.
+    Wird vom Skript eingeblendet, sobald die Option gewählt ist. Erwartet: option
+#}
+{% block set_configurator_option_body %}
+    <div class="sc-option-body" data-sc-option-body hidden>
+        {% if option.hasVariants %}
+            <div class="sc-row">
+                <label class="form-label" for="sc-var-{{ option.id }}">{{ 'set-configurator.variant'|trans }}</label>
+                <select class="form-select" id="sc-var-{{ option.id }}" data-sc-variant>
+                    <option value="">{{ 'set-configurator.choose'|trans }}</option>
+                    {% for variant in option.variants %}
+                        <option value="{{ variant.id }}" {% if not variant.available %}disabled{% endif %}>
+                            {{ variant.name }} ({{ variant.price|currency }})
+                        </option>
+                    {% endfor %}
+                </select>
+            </div>
+        {% endif %}
+
+        {% if not option.fixedQuantity %}
+            <div class="sc-row">
+                <label class="form-label" for="sc-qty-{{ option.id }}">{{ 'set-configurator.quantity'|trans }}</label>
+                <input type="number" class="form-control" id="sc-qty-{{ option.id }}"
+                       min="{{ option.quantityMin }}" max="{{ option.quantityMax }}" value="{{ option.quantityMin }}" data-sc-qty>
+            </div>
+        {% elseif option.quantityMin > 1 %}
+            <p class="sc-fixed-qty">{{ option.quantityMin }} ×</p>
+        {% endif %}
+
+        {% for field in option.fields %}
+            <div class="sc-row sc-field sc-field--{{ field.type }}">
+                {% if field.type == 'checkbox' %}
+                    <label class="form-check">
+                        <input type="checkbox" class="form-check-input" data-sc-field="{{ field.id }}" data-field-type="checkbox">
+                        <span class="form-check-label">{{ field.label }}{% if field.required %} *{% endif %}</span>
+                    </label>
+                {% else %}
+                    <label class="form-label" for="sc-f-{{ field.id }}">{{ field.label }}{% if field.required %} *{% endif %}</label>
+
+                    {% if field.type == 'select' %}
+                        <select class="form-select" id="sc-f-{{ field.id }}" data-sc-field="{{ field.id }}" data-field-type="select">
+                            <option value="">{{ 'set-configurator.choose'|trans }}</option>
+                            {% for choice in field.choices %}
+                                <option value="{{ choice.value }}">{{ choice.label }}</option>
+                            {% endfor %}
+                        </select>
+                    {% elseif field.type == 'number' %}
+                        <input type="number" step="any" class="form-control" id="sc-f-{{ field.id }}" data-sc-field="{{ field.id }}" data-field-type="number">
+                    {% elseif field.type == 'upload' %}
+                        <input type="file" class="form-control" id="sc-f-{{ field.id }}" accept=".jpg,.jpeg,.png,.gif,.webp,.pdf" data-sc-upload>
+                        <input type="hidden" data-sc-field="{{ field.id }}" data-field-type="upload">
+                    {% else %}
+                        <input type="text" maxlength="1000" class="form-control" id="sc-f-{{ field.id }}" data-sc-field="{{ field.id }}" data-field-type="text">
+                    {% endif %}
+                {% endif %}
+            </div>
+        {% endfor %}
+
+        {% if option.nested %}
+            <div class="sc-nested">
+                {% sw_include '@SetConfigurator/storefront/set-configurator/set.html.twig' with { set: option.nested } %}
+            </div>
+        {% endif %}
+    </div>
+{% endblock %}

@@ -1,0 +1,110 @@
+<?xml version="1.0" ?>
+<container xmlns="http://symfony.com/schema/dic/services"
+           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+    <services>
+        <!-- Datenmodell -->
+        <service id="SetConfigurator\Core\Content\Set\SetDefinition">
+            <tag name="shopware.entity.definition" entity="set_configurator"/>
+        </service>
+        <service id="SetConfigurator\Core\Content\Slot\SlotDefinition">
+            <tag name="shopware.entity.definition" entity="set_configurator_slot"/>
+        </service>
+        <service id="SetConfigurator\Core\Content\Option\OptionDefinition">
+            <tag name="shopware.entity.definition" entity="set_configurator_option"/>
+        </service>
+        <service id="SetConfigurator\Core\Content\Field\FieldDefinition">
+            <tag name="shopware.entity.definition" entity="set_configurator_option_field"/>
+        </service>
+        <service id="SetConfigurator\Core\Content\Assignment\AssignmentDefinition">
+            <tag name="shopware.entity.definition" entity="set_configurator_product"/>
+        </service>
+        <service id="SetConfigurator\Core\Content\Target\TargetDefinition">
+            <tag name="shopware.entity.definition" entity="set_configurator_target"/>
+        </service>
+        <service id="SetConfigurator\Core\Content\Product\ProductExtension">
+            <tag name="shopware.entity.extension"/>
+        </service>
+
+        <!-- Dienste -->
+        <service id="SetConfigurator\Service\Formula\FormulaEvaluator"/>
+
+        <service id="SetConfigurator\Service\SelectionValidator"/>
+
+        <service id="SetConfigurator\Service\PriceCalculator">
+            <argument type="service" id="SetConfigurator\Service\Formula\FormulaEvaluator"/>
+        </service>
+
+        <service id="SetConfigurator\Service\SetResolver">
+            <argument type="service" id="set_configurator.repository"/>
+            <argument type="service" id="set_configurator_product.repository"/>
+            <argument type="service" id="set_configurator_target.repository"/>
+            <argument type="service" id="product.repository"/>
+        </service>
+
+        <service id="SetConfigurator\Service\SetConfigurationService">
+            <argument type="service" id="SetConfigurator\Service\SetResolver"/>
+            <argument type="service" id="SetConfigurator\Service\SelectionValidator"/>
+            <argument type="service" id="SetConfigurator\Service\PriceCalculator"/>
+            <argument type="service" id="sales_channel.product.repository"/>
+        </service>
+
+        <!-- Warenkorb: Priorität unter dem ProductCartProcessor (5000), läuft also danach -->
+        <service id="SetConfigurator\Cart\SetCartProcessor">
+            <argument type="service" id="SetConfigurator\Service\SetConfigurationService"/>
+            <argument type="service" id="Shopware\Core\Checkout\Cart\Price\QuantityPriceCalculator"/>
+            <tag name="shopware.cart.processor" priority="4000"/>
+        </service>
+
+        <service id="SetConfigurator\Subscriber\OrderStockSubscriber">
+            <argument type="service" id="Doctrine\DBAL\Connection"/>
+            <argument type="service" id="Shopware\Core\Framework\Adapter\Cache\CacheInvalidator"/>
+            <tag name="kernel.event_subscriber"/>
+        </service>
+
+        <service id="SetConfigurator\Service\SetPresenter">
+            <argument type="service" id="SetConfigurator\Service\SetResolver"/>
+            <argument type="service" id="sales_channel.product.repository"/>
+            <argument type="service" id="SetConfigurator\Service\Formula\FormulaEvaluator"/>
+        </service>
+
+        <service id="SetConfigurator\Subscriber\ProductPageSubscriber">
+            <argument type="service" id="SetConfigurator\Service\SetConfigurationService"/>
+            <argument type="service" id="SetConfigurator\Service\SetPresenter"/>
+            <tag name="kernel.event_subscriber"/>
+        </service>
+
+        <service id="SetConfigurator\Subscriber\WriteValidationSubscriber">
+            <argument type="service" id="SetConfigurator\Service\Formula\FormulaEvaluator"/>
+            <tag name="kernel.event_subscriber"/>
+        </service>
+
+        <!-- Admin-API -->
+        <service id="SetConfigurator\Service\Transfer\SetTransferService">
+            <argument type="service" id="set_configurator.repository"/>
+            <argument type="service" id="set_configurator_slot.repository"/>
+            <argument type="service" id="set_configurator_product.repository"/>
+            <argument type="service" id="product.repository"/>
+            <argument type="service" id="SetConfigurator\Service\Formula\FormulaEvaluator"/>
+        </service>
+
+        <service id="SetConfigurator\Api\AdminRoute" public="true">
+            <argument type="service" id="SetConfigurator\Service\Formula\FormulaEvaluator"/>
+            <argument type="service" id="SetConfigurator\Service\Transfer\SetTransferService"/>
+            <call method="setContainer">
+                <argument type="service" id="service_container"/>
+            </call>
+        </service>
+
+        <!-- Store-API und Storefront-AJAX -->
+        <service id="SetConfigurator\Api\SetRoute" public="true">
+            <argument type="service" id="SetConfigurator\Service\SetConfigurationService"/>
+            <argument type="service" id="sales_channel.product.repository"/>
+            <argument type="service" id="Shopware\Core\Checkout\Cart\SalesChannel\CartService"/>
+            <argument type="service" id="Shopware\Core\Content\Media\MediaService"/>
+            <call method="setContainer">
+                <argument type="service" id="service_container"/>
+            </call>
+        </service>
+    </services>
+</container>

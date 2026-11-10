@@ -1,0 +1,38 @@
+{
+    "set-configurator": {
+        "title": "Configure your set",
+        "choose": "– please choose –",
+        "none": "No selection",
+        "variant": "Variant",
+        "quantity": "Quantity",
+        "total": "Total price",
+        "addToCart": "Add set to cart",
+        "toCart": "Go to cart",
+        "added": "Your set has been added to the cart.",
+        "hint": {
+            "optional": "optional",
+            "min": "choose at least %n%",
+            "max": "up to %n% allowed",
+            "exact": "choose exactly %n%"
+        },
+        "error": {
+            "tooFew": "Please choose at least the required number in every section.",
+            "tooMany": "Too many options are selected in one section.",
+            "quantity": "A quantity is outside the allowed range.",
+            "fieldRequired": "Please fill in all required fields (*).",
+            "fieldInvalid": "An entry is invalid.",
+            "variantRequired": "Please choose a variant.",
+            "variantInvalid": "The chosen variant is not possible.",
+            "unavailable": "A selected product is no longer available.",
+            "nested": "The included set cannot be used.",
+            "shortage": "Not enough stock:",
+            "upload": "The file could not be uploaded (allowed: JPG, PNG, GIF, WebP, PDF up to 5 MB).",
+            "generic": "The configuration could not be calculated. Please try again."
+        }
+    },
+    "checkout": {
+        "set-configurator-configuration-invalid": "A set in your cart was no longer valid and has been removed.",
+        "set-configurator-configuration-set-missing": "The set for a product in your cart is no longer available. The item was removed.",
+        "set-configurator-configuration-out-of-stock": "There is not enough stock for a set in your cart. The item was removed."
+    }
+}

@@ -1,0 +1,83 @@
+{% block set_configurator_list %}
+    <sw-page class="set-configurator-list">
+        <template #smart-bar-header>
+            <h2>{{ $tc('set-configurator.general.title') }}</h2>
+        </template>
+
+        <template #smart-bar-actions>
+            <sw-button @click="onExport">
+                {{ $tc('set-configurator.transfer.export') }}
+            </sw-button>
+            <label class="sw-button sc-import-button">
+                {{ $tc('set-configurator.transfer.import') }}
+                <input
+                    type="file"
+                    accept="application/json,.json"
+                    hidden
+                    @change="onFileSelected"
+                >
+            </label>
+            <sw-button
+                variant="primary"
+                :router-link="{ name: 'set.configurator.create' }"
+            >
+                {{ $tc('set-configurator.list.add') }}
+            </sw-button>
+        </template>
+
+        <template #content>
+            <sw-card-view>
+                <sw-card
+                    position-identifier="set-configurator-list"
+                    :is-loading="isLoading"
+                >
+                    <sw-entity-listing
+                        v-if="items"
+                        :items="items"
+                        :repository="repository"
+                        :columns="columns"
+                        :is-loading="isLoading"
+                        :show-selection="false"
+                        detail-route="set.configurator.detail"
+                        :full-page="false"
+                    />
+                </sw-card>
+            </sw-card-view>
+        </template>
+
+        <template #modals>
+            <sw-modal
+                v-if="importCheck"
+                :title="$tc('set-configurator.transfer.importTitle')"
+                variant="small"
+                @modal-close="closeImport"
+            >
+                <template v-if="importCheck.errors && importCheck.errors.length">
+                    <p><strong>{{ $tc('set-configurator.transfer.problems') }}</strong></p>
+                    <ul class="sc-import-errors">
+                        <li v-for="(error, index) in importCheck.errors" :key="index">{{ error }}</li>
+                    </ul>
+                </template>
+                <template v-else>
+                    <p>{{ $tc('set-configurator.transfer.summary', 0, { created: importCheck.created, replaced: importCheck.replaced, reassigned: importCheck.reassigned }) }}</p>
+                    <p v-if="importCheck.replaced > 0">{{ $tc('set-configurator.transfer.replaceWarning') }}</p>
+                </template>
+
+                <template #modal-footer>
+                    <sw-button size="small" @click="closeImport">
+                        {{ $tc('set-configurator.detail.cancel') }}
+                    </sw-button>
+                    <sw-button
+                        v-if="!importCheck.errors || !importCheck.errors.length"
+                        size="small"
+                        variant="primary"
+                        :is-loading="isImporting"
+                        @click="confirmImport"
+                    >
+                        {{ $tc('set-configurator.transfer.importNow') }}
+                    </sw-button>
+                </template>
+            </sw-modal>
+        </template>
+    </sw-page>
+{% endblock %}

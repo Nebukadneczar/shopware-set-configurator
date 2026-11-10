@@ -1,0 +1,26 @@
+{#
+    Vorlage "select": Auswahlliste bei genau einer Wahl, sonst Checkbox-Liste.
+    Struktur für das Skript: .sc-slot-body > [data-sc-select] und .sc-options > .sc-option > .sc-option-body
+#}
+{% if slot.multiple %}
+    {% sw_include '@SetConfigurator/storefront/set-configurator/slot/choice.html.twig' with { slot: slot, mode: 'list' } %}
+{% else %}
+    <select class="form-select sc-select" data-sc-select aria-label="{{ slot.name }}">
+        {% if slot.min < 1 %}
+            <option value="">{{ 'set-configurator.choose'|trans }}</option>
+        {% endif %}
+        {% for option in slot.options %}
+            <option value="{{ option.id }}" {% if option.preselected %}selected{% endif %}>
+                {{ option.label }}{% if option.price is not null and option.price > 0 %} (+ {{ option.price|currency }}){% endif %}
+            </option>
+        {% endfor %}
+    </select>
+
+    <div class="sc-options">
+        {% for option in slot.options %}
+            <div class="sc-option" data-sc-option data-option-id="{{ option.id }}">
+                {% sw_include '@SetConfigurator/storefront/set-configurator/option-body.html.twig' with { option: option } %}
+            </div>
+        {% endfor %}
+    </div>
+{% endif %}

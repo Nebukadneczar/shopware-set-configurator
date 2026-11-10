@@ -1,0 +1,17 @@
+{% sw_extends '@Storefront/storefront/component/buy-widget/buy-widget.html.twig' %}
+
+{#
+    Der Konfigurator steht direkt vor dem Kaufformular (nach der Variantenauswahl). Das Standard-Formular wird
+    vom Skript ausgeblendet. Der Block buy_widget_buy_form wird von den meisten Themes und Plugins nur mit parent() erweitert,
+    deshalb vertragen sich die Erweiterungen.
+#}
+{% block buy_widget_buy_form %}
+    {% if page is defined and page.extensions.setConfigurator is defined and page.extensions.setConfigurator.get('productId') == product.id %}
+        {% sw_include '@SetConfigurator/storefront/set-configurator/configurator.html.twig' with {
+            productId: product.id,
+            set: page.extensions.setConfigurator.get('set')
+        } %}
+    {% endif %}
+
+    {{ parent() }}
+{% endblock %}

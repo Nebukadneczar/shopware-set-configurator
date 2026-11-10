@@ -1,0 +1,34 @@
+{# Ein Slot. Die Vorlage wählt der Shop-Betreiber je Slot: select, radio, checkbox, cards. Erwartet: slot #}
+{% block set_configurator_slot %}
+    {% set knownTemplates = ['select', 'radio', 'checkbox', 'cards'] %}
+    {% set slotTemplate = slot.template in knownTemplates ? slot.template : 'select' %}
+
+    <fieldset class="sc-slot sc-slot--{{ slotTemplate }}"
+              data-sc-slot
+              data-slot-id="{{ slot.id }}"
+              data-min="{{ slot.min }}"
+              data-max="{{ slot.max is null ? '' : slot.max }}">
+        <legend class="sc-slot-title">
+            {{ slot.name }}
+            <small class="sc-slot-hint">
+                {% if slot.min > 0 and slot.max is not null and slot.min == slot.max %}
+                    {{ 'set-configurator.hint.exact'|trans({ '%n%': slot.min }) }}
+                {% elseif slot.min > 0 %}
+                    {{ 'set-configurator.hint.min'|trans({ '%n%': slot.min }) }}
+                {% elseif slot.max is not null and slot.multiple %}
+                    {{ 'set-configurator.hint.max'|trans({ '%n%': slot.max }) }}
+                {% else %}
+                    {{ 'set-configurator.hint.optional'|trans }}
+                {% endif %}
+            </small>
+        </legend>
+
+        {% if slot.description %}
+            <p class="sc-slot-description">{{ slot.description }}</p>
+        {% endif %}
+
+        <div class="sc-slot-body">
+            {% sw_include '@SetConfigurator/storefront/set-configurator/slot/' ~ slotTemplate ~ '.html.twig' with { slot: slot } %}
+        </div>
+    </fieldset>
+{% endblock %}

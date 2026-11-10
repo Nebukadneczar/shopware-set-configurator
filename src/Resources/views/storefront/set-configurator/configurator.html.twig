@@ -1,0 +1,77 @@
+{#
+    Set-Konfigurator auf der Produktseite.
+    Erweiterbar: Blöcke überschreiben oder je Slot eine eigene Vorlage unter
+    storefront/set-configurator/slot/<vorlage>.html.twig anlegen.
+#}
+{% block set_configurator_configurator %}
+    {% set scOptions = {
+        configureUrl: path('frontend.set-configurator.configure', { productId: productId }),
+        addUrl: path('frontend.set-configurator.add', { productId: productId }),
+        uploadUrl: path('frontend.set-configurator.upload'),
+        cartUrl: path('frontend.checkout.cart.page'),
+        currency: context.currency.isoCode,
+        messages: {
+            too_few: 'set-configurator.error.tooFew'|trans,
+            too_many: 'set-configurator.error.tooMany'|trans,
+            quantity_out_of_range: 'set-configurator.error.quantity'|trans,
+            field_required: 'set-configurator.error.fieldRequired'|trans,
+            field_invalid: 'set-configurator.error.fieldInvalid'|trans,
+            variant_required: 'set-configurator.error.variantRequired'|trans,
+            variant_invalid: 'set-configurator.error.variantInvalid'|trans,
+            product_unavailable: 'set-configurator.error.unavailable'|trans,
+            nested_invalid: 'set-configurator.error.nested'|trans,
+            formula_error: 'set-configurator.error.generic'|trans,
+            shortage: 'set-configurator.error.shortage'|trans,
+            generic: 'set-configurator.error.generic'|trans,
+            added: 'set-configurator.added'|trans,
+            uploadFailed: 'set-configurator.error.upload'|trans
+        }
+    } %}
+
+    {# Farben aus der Plugin-Konfiguration; nur gültige Hex-Farben werden übernommen. #}
+    {% set scPrimary = config('SetConfigurator.config.primaryColor') %}
+    {% set scBorder = config('SetConfigurator.config.borderColor') %}
+    {% if scPrimary is not same as(null) and scPrimary matches '/^#[0-9a-fA-F]{3,8}$/' %}{% else %}{% set scPrimary = '#0b5ed7' %}{% endif %}
+    {% if scBorder is not same as(null) and scBorder matches '/^#[0-9a-fA-F]{3,8}$/' %}{% else %}{% set scBorder = '#d7dde3' %}{% endif %}
+
+    <div class="set-configurator"
+         style="--sc-primary: {{ scPrimary }}; --sc-border: {{ scBorder }};"
+         data-set-configurator="true"
+         data-set-configurator-options="{{ scOptions|json_encode }}">
+
+        {% block set_configurator_configurator_title %}
+            <h2 class="sc-set-title">{{ 'set-configurator.title'|trans }}</h2>
+        {% endblock %}
+
+        {% block set_configurator_configurator_set %}
+            {% sw_include '@SetConfigurator/storefront/set-configurator/set.html.twig' with { set: set } %}
+        {% endblock %}
+
+        {% block set_configurator_configurator_footer %}
+            <div class="sc-set-footer">
+                <div class="sc-set-hostqty">
+                    <label for="sc-host-qty-{{ productId }}">{{ 'set-configurator.quantity'|trans }}</label>
+                    <input type="number" id="sc-host-qty-{{ productId }}" class="form-control" min="1" max="999" value="1" data-sc-host-qty>
+                </div>
+
+                <div class="sc-set-total">
+                    <span class="sc-set-total-label">{{ 'set-configurator.total'|trans }}</span>
+                    <strong class="sc-set-total-value" data-sc-total aria-live="polite">–</strong>
+                </div>
+
+                <ul class="sc-set-messages" data-sc-messages aria-live="polite"></ul>
+
+                <div class="sc-set-success alert alert-success" data-sc-success hidden>
+                    <span data-sc-success-text></span>
+                    <a href="{{ path('frontend.checkout.cart.page') }}">{{ 'set-configurator.toCart'|trans }}</a>
+                </div>
+
+                <div class="d-grid">
+                    <button type="button" class="btn btn-primary btn-buy" data-sc-add disabled>
+                        {{ 'set-configurator.addToCart'|trans }}
+                    </button>
+                </div>
+            </div>
+        {% endblock %}
+    </div>
+{% endblock %}

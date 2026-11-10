@@ -1,0 +1,15 @@
+{# Lesbare Auswahl (rekursiv). Erwartet: rows #}
+<ul class="sc-summary-list">
+    {% for row in rows %}
+        <li>
+            <span class="sc-summary-slot">{{ row.slot }}:</span>
+            {{ row.quantity > 1 ? row.quantity ~ '× ' : '' }}{{ row.label }}
+            {% for field in row.fields %}
+                <span class="sc-summary-field">({{ field.label }}: {{ field.value }})</span>
+            {% endfor %}
+            {% if row.nested is defined and row.nested %}
+                {% sw_include '@SetConfigurator/storefront/set-configurator/summary.html.twig' with { rows: row.nested } %}
+            {% endif %}
+        </li>
+    {% endfor %}
+</ul>

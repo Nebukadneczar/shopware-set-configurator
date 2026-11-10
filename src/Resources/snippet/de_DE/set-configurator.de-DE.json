@@ -1,0 +1,38 @@
+{
+    "set-configurator": {
+        "title": "Dein Set zusammenstellen",
+        "choose": "– bitte wählen –",
+        "none": "Keine Auswahl",
+        "variant": "Variante",
+        "quantity": "Menge",
+        "total": "Gesamtpreis",
+        "addToCart": "Set in den Warenkorb",
+        "toCart": "Zum Warenkorb",
+        "added": "Dein Set wurde in den Warenkorb gelegt.",
+        "hint": {
+            "optional": "optional",
+            "min": "mindestens %n% wählen",
+            "max": "bis zu %n% wählbar",
+            "exact": "genau %n% wählen"
+        },
+        "error": {
+            "tooFew": "Bitte wähle in jedem Bereich mindestens die geforderte Anzahl.",
+            "tooMany": "In einem Bereich sind zu viele Optionen gewählt.",
+            "quantity": "Eine Menge liegt außerhalb des erlaubten Bereichs.",
+            "fieldRequired": "Bitte fülle alle Pflichtfelder (*) aus.",
+            "fieldInvalid": "Eine Eingabe ist ungültig.",
+            "variantRequired": "Bitte wähle eine Variante.",
+            "variantInvalid": "Die gewählte Variante ist nicht möglich.",
+            "unavailable": "Ein gewähltes Produkt ist nicht mehr verfügbar.",
+            "nested": "Das enthaltene Set kann nicht verwendet werden.",
+            "shortage": "Nicht genug Lagerbestand:",
+            "upload": "Die Datei konnte nicht hochgeladen werden (erlaubt: JPG, PNG, GIF, WebP, PDF bis 5 MB).",
+            "generic": "Die Konfiguration konnte nicht berechnet werden. Bitte versuche es erneut."
+        }
+    },
+    "checkout": {
+        "set-configurator-configuration-invalid": "Ein Set im Warenkorb war nicht mehr gültig und wurde entfernt.",
+        "set-configurator-configuration-set-missing": "Für ein Produkt im Warenkorb ist das Set nicht mehr verfügbar. Die Position wurde entfernt.",
+        "set-configurator-configuration-out-of-stock": "Für ein Set im Warenkorb reicht der Lagerbestand nicht aus. Die Position wurde entfernt."
+    }
+}
